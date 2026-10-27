@@ -1,0 +1,36 @@
+
+▸ База inbox
+создана: inbox
+
+▸ Data API, вход и файлы
+https://data.layero.ru/inbox
+
+▸ Бакет screenshots (приватный, до 5 МБ, JPEG/PNG)
+
+▸ Схема: таблицы, RLS, функции
+0001_schema.sql: 38 операторов
+0002_forms.sql: 7 операторов
+0003_storage.sql: 8 операторов
+0004_notifications.sql: 17 операторов
+app_url = https://inbox.layero.app/dashboard/
+
+▸ Письма входа и Telegram
+имя отправителя: Layero Inbox
+секрет TELEGRAM_BOT_TOKEN задан
+
+▸ Виджет: https://inbox-widget.layero.app
+https://inbox-widget.layero.app/
+
+▸ Лендинг и кабинет: https://inbox.layero.app
+https://inbox.layero.app/
+
+Готово.
+  Лендинг   https://inbox.layero.app
+  Кабинет   https://inbox.layero.app/dashboard/
+  Виджет    https://inbox-widget.layero.app/embed.js
+
+Дальше:
+  1. Зарегистрируйтесь в кабинете и добавьте сайт — кабинет покажет строку для вставки.
+  2. Чтобы виджет работал на самом лендинге, задайте ключ сайта и пересоберите:
+       cd apps/web && npx layero@latest env set VITE_INBOX_SITE_KEY=st_… && npx layero@latest deploy --yes
+  3. Проверьте права: ./scripts/check-access.sh (см. docs).

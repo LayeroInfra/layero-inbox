@@ -1,0 +1,16 @@
+{
+  "name": "layero-inbox-web",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "scripts": {
+    "build": "vite build",
+    "dev": "vite"
+  },
+  "dependencies": {
+    "@supabase/supabase-js": "2.76.1"
+  },
+  "devDependencies": {
+    "vite": "7.1.12"
+  }
+}

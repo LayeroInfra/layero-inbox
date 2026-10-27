@@ -1,0 +1,3 @@
+# Старые ссылки на кабинет (/app) ведут на /dashboard
+/app /dashboard/ 301
+/app/* /dashboard/:splat 301

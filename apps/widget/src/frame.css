@@ -1,0 +1,65 @@
+:root {
+  --paper: #faf9f6; --soft: #f3f1ea; --mute: #ecebe3; --line: #dedcd1; --strong: #c9c6b6;
+  --ink: #141413; --onyx: #1f1e1d; --graphite: #3d3d3a; --dusty: #73726c; --dot: #ffc52e; --danger: #b42318;
+}
+* { box-sizing: border-box; }
+[hidden] { display: none !important; }
+html, body { margin: 0; height: 100%; }
+body { font: 15px/1.45 Geist, system-ui, -apple-system, "Segoe UI", sans-serif; color: var(--ink); background: var(--paper); }
+.card { display: flex; flex-direction: column; min-height: 100%; padding: 18px 22px 12px; }
+.head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px; }
+.kind { display: inline-flex; align-items: center; gap: 8px; font: 500 12px "Geist Mono", ui-monospace, monospace; color: var(--dusty); letter-spacing: .04em; }
+.kind::before { content: ""; width: 8px; height: 8px; border-radius: 50%; background: var(--dot); box-shadow: 0 0 0 1.5px var(--ink); }
+.x { border: 0; background: var(--mute); width: 34px; height: 34px; border-radius: 50%; font-size: 20px; line-height: 1; cursor: pointer; color: var(--ink); }
+.x:hover { background: var(--line); }
+h1 { margin: 0 0 4px; font-size: 28px; line-height: 1; font-weight: 700; letter-spacing: -.04em; }
+.form { display: flex; flex-direction: column; gap: 12px; flex: 1; }
+.field { display: flex; flex-direction: column; gap: 6px; font-size: 13px; color: var(--graphite); }
+textarea, input:not([type=checkbox]) {
+  font: 15px Geist, system-ui, sans-serif; color: var(--ink); padding: 11px 12px;
+  border: 1px solid var(--strong); border-radius: 12px; background: #fff; resize: none;
+}
+.mono { font-family: "Geist Mono", ui-monospace, monospace !important; }
+textarea:focus, input:focus, button:focus-visible { outline: 2px solid var(--ink); outline-offset: 1px; }
+.consent { display: flex; gap: 8px; align-items: flex-start; font-size: 12px; color: var(--graphite); line-height: 1.4; }
+.consent input { margin-top: 2px; }
+.shot { margin: 0; border: 1px solid var(--line); border-radius: 12px; overflow: hidden; background: #fff; }
+.shot img { display: block; width: 100%; max-height: 140px; object-fit: cover; object-position: top; }
+.shot figcaption { padding: 8px 10px; font-size: 13px; }
+.meta { margin: 0; font: 11px "Geist Mono", ui-monospace, monospace; color: var(--dusty); word-break: break-all; }
+.error { margin: 0; color: var(--danger); font-size: 14px; }
+.note { margin: 0; font-size: 14px; }
+.send {
+  margin-top: auto; font: 600 15px Geist, system-ui, sans-serif; padding: 14px; border: 0; border-radius: 999px;
+  background: var(--ink); color: var(--paper); cursor: pointer;
+}
+.send:disabled { opacity: .5; cursor: default; }
+.send.ghost { background: transparent; color: inherit; border: 1px solid var(--dusty); margin-top: 8px; align-self: flex-start; padding: 11px 20px; }
+
+/* запись — тёмная карточка */
+body.booking { background: var(--ink); color: var(--paper); }
+body.booking .x { background: var(--onyx); color: var(--paper); }
+body.booking .kind { color: #b8b6ad; }
+body.booking .kind::before { box-shadow: none; }
+.dark .field, .dark .consent { color: #c9c6b6; }
+.dark input:not([type=checkbox]) { background: var(--onyx); border-color: var(--graphite); color: var(--paper); }
+.dark input:focus, .dark button:focus-visible { outline-color: var(--dot); }
+.dark .send { background: var(--paper); color: var(--ink); }
+.days { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 6px; }
+.times { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 6px; max-height: 128px; overflow-y: auto; }
+.chip {
+  border: 1px solid var(--graphite); background: transparent; color: var(--paper); border-radius: 10px;
+  padding: 8px 0; font: 500 12px Geist, system-ui, sans-serif; cursor: pointer; text-align: center;
+}
+.chip b { display: block; font-size: 18px; }
+.chip.time { font: 14px "Geist Mono", ui-monospace, monospace; padding: 9px 0; }
+.chip[aria-pressed=true] { background: var(--paper); color: var(--ink); border-color: var(--paper); }
+.chip.time[aria-pressed=true] { background: var(--dot); border-color: var(--dot); font-weight: 600; }
+
+.done { flex: 1; display: flex; flex-direction: column; gap: 14px; justify-content: center; }
+.big-dot { width: 52px; height: 52px; border-radius: 50%; background: var(--dot); }
+.done h1 { font-size: 34px; }
+.done p { margin: 0; color: var(--graphite); }
+body.booking .done p { color: #dcdad0; }
+.foot { margin-top: 14px; font: 11px "Geist Mono", ui-monospace, monospace; color: var(--dusty); text-align: center; }
+.foot a { color: inherit; }

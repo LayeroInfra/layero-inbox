@@ -1,0 +1,8 @@
+node_modules/
+dist/
+.env
+.env.local
+.DS_Store
+.layero/
+apps/widget/public/vendor/
+docs/article/_preview-*.html

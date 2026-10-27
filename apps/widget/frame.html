@@ -1,0 +1,82 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex">
+  <title>Layero Inbox</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/src/frame.css">
+</head>
+<body>
+  <main class="card">
+    <header class="head">
+      <span class="kind" id="kind"></span>
+      <button type="button" class="x" id="close" aria-label="Закрыть">×</button>
+    </header>
+
+    <!-- Проблема -->
+    <form id="form-problem" class="form" hidden novalidate>
+      <h1>Что сломалось?</h1>
+      <label class="field">Пара слов
+        <textarea name="message" rows="4" maxlength="2000" required placeholder="Например: кнопка «Оплатить» не нажимается"></textarea>
+      </label>
+      <label class="field">Почта для ответа, если хотите
+        <input name="contact" type="email" maxlength="200" autocomplete="email" placeholder="you@mail.ru">
+      </label>
+      <figure class="shot" id="shot" hidden>
+        <img id="shot-img" alt="Снимок экрана, который приложится к обращению">
+        <figcaption><label><input type="checkbox" id="shot-on" checked> Приложить снимок экрана</label></figcaption>
+      </figure>
+      <p class="meta" id="meta"></p>
+      <p class="error" role="alert" hidden></p>
+      <button type="submit" class="send">Отправить</button>
+    </form>
+
+    <!-- Заявка -->
+    <form id="form-lead" class="form" hidden novalidate>
+      <h1>Оставьте контакт&nbsp;— ответим</h1>
+      <label class="field">Как к&nbsp;вам обращаться
+        <input name="name" maxlength="120" autocomplete="name" placeholder="Анна">
+      </label>
+      <label class="field">Телефон или&nbsp;почта
+        <input name="contact" class="mono" maxlength="200" required autocomplete="tel" placeholder="+7 900 000-00-00">
+      </label>
+      <label class="field">Что интересует
+        <textarea name="message" rows="3" maxlength="2000" placeholder="Например: оптовая цена"></textarea>
+      </label>
+      <label class="consent"><input type="checkbox" name="consent" required> Согласен(на) на&nbsp;обработку персональных данных</label>
+      <p class="error" role="alert" hidden></p>
+      <button type="submit" class="send">Отправить заявку</button>
+    </form>
+
+    <!-- Запись -->
+    <form id="form-booking" class="form dark" hidden novalidate>
+      <h1>Когда вам удобно?</h1>
+      <div class="days" id="days" role="group" aria-label="День"></div>
+      <div class="times" id="times" role="group" aria-label="Время"></div>
+      <p class="note" id="slots-note" hidden>Свободных слотов нет&nbsp;— оставьте заявку, перезвоним.</p>
+      <label class="field">Имя
+        <input name="name" maxlength="120" autocomplete="name" placeholder="Пётр">
+      </label>
+      <label class="field">Телефон или&nbsp;почта
+        <input name="contact" class="mono" maxlength="200" required autocomplete="tel" placeholder="+7 900 000-00-00">
+      </label>
+      <label class="consent"><input type="checkbox" name="consent" required> Согласен(на) на&nbsp;обработку персональных данных</label>
+      <p class="error" role="alert" hidden></p>
+      <button type="submit" class="send" id="book-send" disabled>Выберите время</button>
+    </form>
+
+    <section class="done" id="done" hidden>
+      <span class="big-dot" aria-hidden="true"></span>
+      <h1 id="done-title">Отправлено.</h1>
+      <p id="done-text">Владелец сайта уже видит ваше сообщение.</p>
+      <button type="button" class="send ghost" id="done-close">Закрыть</button>
+    </section>
+
+    <footer class="foot">работает на <a href="https://inbox.layero.app" target="_blank" rel="noopener">Layero Inbox</a></footer>
+  </main>
+  <script type="module" src="/src/frame.js"></script>
+</body>
+</html>

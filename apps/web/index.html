@@ -1,0 +1,195 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Layero Inbox — виджет обратной связи, заявок и онлайн-записи для сайта</title>
+  <meta name="description" content="Добавьте на сайт кнопку «Сообщить о проблеме», форму заявки или онлайн-запись одной строкой кода. Все сообщения — в одном кабинете, со снимком экрана, адресом страницы и контактами посетителя.">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Ccircle cx='8' cy='8' r='6' fill='%23ffc52e' stroke='%23141413' stroke-width='2'/%3E%3C/svg%3E">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    :root { --paper: #faf9f6; --soft: #f3f1ea; --mute: #ecebe3; --line: #dedcd1; --line-soft: #e9e7dd; --strong: #c9c6b6;
+            --ink: #141413; --graphite: #3d3d3a; --dusty: #73726c; --dot: #ffc52e; }
+    * { box-sizing: border-box; }
+    body { margin: 0; background: var(--paper); color: var(--ink); font: 17px/1.5 Geist, -apple-system, "Segoe UI", Roboto, sans-serif; }
+    a { color: inherit; }
+    button:focus-visible, a:focus-visible { outline: 3px solid var(--dot); outline-offset: 3px; }
+    .wrap { max-width: 1240px; margin: 0 auto; padding: 0 24px; }
+    .mono { font-family: "Geist Mono", ui-monospace, monospace; }
+    .label { font: 500 12px "Geist Mono", ui-monospace, monospace; letter-spacing: .08em; text-transform: uppercase; color: var(--dusty); }
+    /* Крупные заголовки: трекинг мягче и без точек в конце — на этом шрифте точка сливается с буквой */
+    h1, h2, h3 { font-weight: 700; margin: 0; }
+    h1 { font-size: clamp(40px, 5vw, 68px); letter-spacing: -0.03em; line-height: 1.04; }
+    h2 { font-size: clamp(34px, 4.4vw, 60px); letter-spacing: -0.03em; line-height: 1.02; }
+    h3 { font-size: 24px; letter-spacing: -0.02em; line-height: 1.15; }
+    .btn { display: inline-flex; align-items: center; gap: 8px; text-decoration: none; border-radius: 999px; padding: 15px 24px; font-weight: 600; font-size: 16px; border: 0; cursor: pointer; }
+    .btn.dark { background: var(--ink); color: var(--paper); }
+    .btn.dark:hover { background: #000; }
+    .btn.line { border: 1px solid var(--strong); background: #fff; color: var(--ink); font-weight: 500; }
+    .btn.light { background: var(--paper); color: var(--ink); }
+    .btn.yellow { background: var(--dot); color: var(--ink); font-weight: 700; }
+    .btn.ghost { background: transparent; color: var(--paper); border: 1px solid var(--dusty); font-weight: 500; }
+    .brand { display: inline-flex; align-items: flex-start; text-decoration: none; }
+    .brand b { font-size: 26px; letter-spacing: -0.05em; line-height: 1; }
+    .brand i { width: 9px; height: 9px; border-radius: 50%; background: var(--dot); margin-left: 2px; box-shadow: 0 0 0 2px var(--ink); }
+    .brand small { font-size: 13px; color: var(--dusty); margin-left: 10px; align-self: center; }
+    .card { border: 1px solid var(--line); border-radius: 16px; background: #fff; padding: 28px; display: flex; flex-direction: column; gap: 12px; }
+    .card p, .muted { margin: 0; color: var(--graphite); }
+    .grid3 { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 320px), 1fr)); gap: 16px; }
+    .dot { width: 10px; height: 10px; border-radius: 50%; background: var(--dot); box-shadow: 0 0 0 2px var(--ink); flex: none; }
+    .dot.read { background: transparent; box-shadow: none; border: 1.5px solid var(--dusty); }
+    .hero { padding-top: 72px; padding-bottom: 72px; display: flex; flex-wrap: wrap; gap: 48px 64px; align-items: center; }
+    .hero-text { flex: 1 1 520px; min-width: 0; display: flex; flex-direction: column; gap: 24px; }
+    .hero-widget { flex: 0 1 400px; min-width: 0; margin: 0 auto; display: flex; flex-direction: column; gap: 10px; align-items: center; }
+    .hero-widget figcaption { font-size: 12px; color: var(--dusty); }
+    .w-card { width: 100%; max-width: 400px; background: #fff; border: 1px solid var(--line); border-radius: 20px; padding: 22px; display: flex; flex-direction: column; gap: 14px; box-shadow: 0 24px 60px rgba(20,20,19,.12); }
+    .w-head { display: flex; justify-content: space-between; align-items: center; }
+    .w-kind { display: inline-flex; align-items: center; gap: 8px; font: 500 12px "Geist Mono", monospace; color: var(--dusty); }
+    .w-kind .dot { width: 8px; height: 8px; box-shadow: 0 0 0 1.5px var(--ink); }
+    .w-x { width: 32px; height: 32px; border-radius: 50%; background: var(--mute); display: inline-flex; align-items: center; justify-content: center; font-size: 18px; }
+    .w-title { font-size: 26px; font-weight: 700; letter-spacing: -0.02em; }
+    .w-field { display: flex; flex-direction: column; gap: 6px; font-size: 13px; color: var(--graphite); }
+    .w-input { border: 1px solid var(--strong); border-radius: 12px; padding: 11px 12px; font-size: 15px; color: var(--ink); min-height: 64px; }
+    .w-shot { border: 1px solid var(--line); border-radius: 12px; overflow: hidden; }
+    .w-shot-img { height: 84px; background: var(--soft); padding: 14px; display: flex; flex-direction: column; gap: 8px; }
+    .w-shot-img div { height: 8px; background: var(--line); border-radius: 4px; width: 70%; }
+    .w-shot-img div:nth-child(2) { width: 90%; } .w-shot-img div:nth-child(3) { width: 40%; height: 18px; border-radius: 999px; }
+    .w-check { padding: 8px 10px; font-size: 13px; }
+    .w-meta { font-size: 11px; color: var(--dusty); }
+    .w-send { background: var(--ink); color: var(--paper); border-radius: 999px; padding: 13px; text-align: center; font-weight: 600; }
+    nav a { text-decoration: none; }
+    nav a:hover { text-decoration: underline; }
+    @media (max-width: 720px) { nav.links { display: none; } }
+  </style>
+</head>
+<body>
+
+<header class="wrap" style="padding-top: 22px; padding-bottom: 22px; display: flex; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap">
+  <a class="brand" href="/"><b>inbox</b><i aria-hidden="true"></i><small>by layero</small></a>
+  <nav class="links" style="display: flex; gap: 28px; font-size: 15px">
+    <a href="#forms">Формы</a><a href="#how">Как работает</a><a href="#install">Установка</a><a href="#security">Данные</a>
+  </nav>
+  <div style="display: flex; gap: 8px">
+    <a class="btn line" href="/dashboard/" style="padding: 10px 16px; font-size: 14px">Войти</a>
+    <a class="btn dark" href="/dashboard/" style="padding: 10px 18px; font-size: 14px">Подключить сайт</a>
+  </div>
+</header>
+
+<section class="wrap hero">
+  <div class="hero-text">
+    <span class="label" style="color: var(--graphite)">Виджет для любого сайта</span>
+    <h1>Обратная связь, которая доходит</h1>
+    <p class="muted" style="font-size: 20px; line-height: 1.5; margin: 0; max-width: 560px">Посетители сообщают о&nbsp;проблемах, оставляют заявки и&nbsp;записываются&nbsp;— вы видите всё в&nbsp;одном кабинете. Одна строка кода.</p>
+    <div style="display: flex; gap: 8px; flex-wrap: wrap">
+      <a class="btn dark" href="/dashboard/">Подключить сайт →</a>
+      <a class="btn line" href="#forms">Попробовать формы</a>
+    </div>
+  </div>
+  <figure class="hero-widget" aria-label="Так форму видит посетитель сайта">
+    <div class="w-card">
+      <div class="w-head"><span class="w-kind"><span class="dot" aria-hidden="true"></span>проблема</span><span class="w-x" aria-hidden="true">×</span></div>
+      <div class="w-title">Что сломалось?</div>
+      <div class="w-field"><span>Пара слов</span><div class="w-input">Кнопка «Оплатить» не&nbsp;нажимается</div></div>
+      <div class="w-shot"><div class="w-shot-img"><div></div><div></div><div></div></div><div class="w-check">☑ Приложить снимок экрана</div></div>
+      <div class="w-meta mono">shop.zarya.ru/cart · 390×844 · ru</div>
+      <div class="w-send">Отправить</div>
+    </div>
+    <figcaption class="mono">так форму видит посетитель</figcaption>
+  </figure>
+</section>
+
+<section class="wrap" style="padding-bottom: 96px">
+  <div style="border: 1px solid var(--line); border-radius: 24px; background: var(--soft); padding: 10px">
+    <div style="display: flex; gap: 6px; padding: 8px 10px; align-items: center"><span style="width: 10px; height: 10px; border-radius: 50%; background: var(--line)"></span><span style="width: 10px; height: 10px; border-radius: 50%; background: var(--line)"></span><span style="width: 10px; height: 10px; border-radius: 50%; background: var(--line)"></span><span class="mono" style="font-size: 12px; color: var(--dusty); margin-left: 10px">inbox.layero.app/dashboard</span></div>
+    <div style="background: #fff; border: 1px solid var(--line-soft); border-radius: 16px; display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 420px), 1fr)); overflow: hidden">
+      <div style="border-right: 1px solid var(--line-soft)">
+        <div style="padding: 18px 22px; display: flex; justify-content: space-between; align-items: baseline; border-bottom: 1px solid var(--line-soft)"><span style="font-size: 20px; font-weight: 700; letter-spacing: -0.02em">shop.zarya.ru</span><span class="mono" style="font-size: 12px; color: var(--dusty)">3 новых</span></div>
+        <div style="padding: 16px 22px; display: flex; gap: 14px; border-bottom: 1px solid var(--line-soft); background: #fffbea"><span class="dot" style="margin-top: 6px" aria-hidden="true"></span><div><div style="font-weight: 600">Кнопка «Оплатить» не&nbsp;нажимается</div><div class="mono" style="font-size: 12px; color: var(--dusty); margin-top: 4px">проблема · /cart · iPhone · снимок</div></div></div>
+        <div style="padding: 16px 22px; display: flex; gap: 14px; border-bottom: 1px solid var(--line-soft)"><span class="dot" style="margin-top: 6px" aria-hidden="true"></span><div><div style="font-weight: 600">Анна · +7 912 345-67-89</div><div class="mono" style="font-size: 12px; color: var(--dusty); margin-top: 4px">заявка · «Есть ли оптовая цена?»</div></div></div>
+        <div style="padding: 16px 22px; display: flex; gap: 14px; border-bottom: 1px solid var(--line-soft)"><span class="dot" style="margin-top: 6px" aria-hidden="true"></span><div><div style="font-weight: 600">Пётр · вт 29 октября, 15:30</div><div class="mono" style="font-size: 12px; color: var(--dusty); margin-top: 4px">запись · +7 903 111-22-33</div></div></div>
+        <div style="padding: 16px 22px; display: flex; gap: 14px"><span class="dot read" style="margin-top: 6px" aria-hidden="true"></span><div><div style="font-weight: 500; color: var(--graphite)">Не&nbsp;отправляется форма без отчества</div><div class="mono" style="font-size: 12px; color: var(--dusty); margin-top: 4px">проблема · /signup · готово</div></div></div>
+      </div>
+      <div style="padding: 22px; display: flex; flex-direction: column; gap: 14px; background: var(--paper)">
+        <div style="aspect-ratio: 16 / 10; border-radius: 12px; border: 1px solid var(--line); background: #fff; display: flex; align-items: center; justify-content: center; position: relative">
+          <div style="width: 70%; display: flex; flex-direction: column; gap: 10px"><div style="height: 14px; width: 60%; background: var(--mute); border-radius: 4px"></div><div style="height: 10px; width: 90%; background: var(--soft); border-radius: 4px"></div><div style="height: 10px; width: 80%; background: var(--soft); border-radius: 4px"></div><div style="height: 36px; width: 40%; background: var(--line); border-radius: 999px; margin-top: 10px"></div></div>
+          <span class="mono" style="position: absolute; top: 12px; left: 12px; font-size: 11px; background: var(--ink); color: var(--paper); padding: 3px 8px; border-radius: 6px">снимок экрана посетителя</span>
+        </div>
+        <div class="mono" style="font-size: 12px; color: var(--dusty); display: grid; grid-template-columns: 90px 1fr; gap: 6px 10px"><span>страница</span><span style="color: var(--ink)">shop.zarya.ru/cart</span><span>окно</span><span style="color: var(--ink)">390×844</span><span>браузер</span><span style="color: var(--ink)">Safari 18 · iOS</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section style="background: var(--ink); color: var(--paper)">
+  <div class="wrap" style="padding-top: 80px; padding-bottom: 80px; display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 300px), 1fr)); gap: 48px">
+    <div style="display: flex; flex-direction: column; gap: 10px"><div style="font-size: 96px; font-weight: 700; letter-spacing: -0.05em; line-height: 0.9">1</div><h3>строка кода для установки</h3><p style="margin: 0; color: #c9c6b6">Работает на&nbsp;любом сайте, куда можно вставить HTML: Tilda, WordPress, Bitrix, свой код.</p></div>
+    <div style="display: flex; flex-direction: column; gap: 10px"><div style="font-size: 96px; font-weight: 700; letter-spacing: -0.05em; line-height: 0.9">3</div><h3>формы в&nbsp;одном виджете</h3><p style="margin: 0; color: #c9c6b6">Сообщение о&nbsp;проблеме, заявка с&nbsp;контактами и&nbsp;онлайн-запись на&nbsp;свободное время.</p></div>
+    <div style="display: flex; flex-direction: column; gap: 10px"><div style="font-size: 96px; font-weight: 700; letter-spacing: -0.05em; line-height: 0.9">5</div><h3>деталей прикладываются сами</h3><p style="margin: 0; color: #c9c6b6">Снимок экрана, адрес страницы, размер окна, язык и&nbsp;браузер. Переспрашивать посетителя не&nbsp;нужно.</p></div>
+  </div>
+</section>
+
+<section id="forms" class="wrap" style="padding-top: 96px; padding-bottom: 40px; display: flex; flex-direction: column; gap: 40px">
+  <div style="display: flex; flex-direction: column; gap: 14px; max-width: 860px">
+    <span class="label">Три формы</span>
+    <h2>Одна кнопка или&nbsp;три&nbsp;— как удобно вашему сайту</h2>
+  </div>
+  <div class="grid3">
+    <div class="card"><span class="label">Проблема</span><h3>«Сообщить о&nbsp;проблеме»</h3><p>Посетитель описывает, что сломалось. Снимок экрана и&nbsp;данные браузера прикладываются автоматически.</p><button type="button" class="btn line" data-inbox="problem" style="align-self: flex-start; margin-top: 8px">Открыть форму</button></div>
+    <div class="card"><span class="label">Заявка</span><h3>«Оставить заявку»</h3><p>Имя, телефон или&nbsp;почта и&nbsp;вопрос. Согласие на&nbsp;обработку персональных данных встроено в&nbsp;форму.</p><button type="button" class="btn line" data-inbox="lead" style="align-self: flex-start; margin-top: 8px">Открыть форму</button></div>
+    <div class="card" style="background: var(--ink); color: var(--paper); border-color: var(--ink)"><span class="label" style="color: #b8b6ad">Запись</span><h3>«Записаться»</h3><p style="color: #dcdad0">Посетитель выбирает день и&nbsp;свободное время по&nbsp;вашему расписанию. Занятое время сразу исчезает из&nbsp;формы.</p><button type="button" class="btn light" data-inbox="booking" style="align-self: flex-start; margin-top: 8px">Открыть форму</button></div>
+  </div>
+  <p class="muted mono" style="font-size: 13px">Это рабочие формы&nbsp;— так их&nbsp;увидят посетители вашего сайта.</p>
+</section>
+
+<section id="how" class="wrap" style="padding-top: 72px; padding-bottom: 40px; display: flex; flex-direction: column; gap: 40px">
+  <div style="display: flex; flex-direction: column; gap: 14px; max-width: 860px">
+    <span class="label">Как это работает</span>
+    <h2>От&nbsp;сообщения посетителя до&nbsp;решённой задачи</h2>
+  </div>
+  <div class="grid3">
+    <div class="card"><span class="mono" style="font-size: 13px; color: var(--dusty)">01</span><h3>Вставьте код на&nbsp;сайт</h3><p>Скопируйте строку из&nbsp;кабинета и&nbsp;добавьте перед &lt;/body&gt;. Кнопка появится на&nbsp;всех страницах.</p></div>
+    <div class="card"><span class="mono" style="font-size: 13px; color: var(--dusty)">02</span><h3>Посетитель пишет</h3><p>Сообщает о&nbsp;проблеме, оставляет контакт или&nbsp;записывается. Вы&nbsp;сразу получаете уведомление, например в&nbsp;Telegram.</p></div>
+    <div class="card"><span class="mono" style="font-size: 13px; color: var(--dusty)">03</span><h3>Разбираете в&nbsp;кабинете</h3><p>Сообщения собраны по&nbsp;сайтам, у&nbsp;каждого статус: новое, в&nbsp;работе, готово. Новые отмечены жёлтым.</p></div>
+  </div>
+</section>
+
+<section id="install" class="wrap" style="padding-top: 72px; padding-bottom: 72px">
+  <div style="border-radius: 24px; background: var(--soft); border: 1px solid var(--line); padding: clamp(28px, 5vw, 56px); display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 440px), 1fr)); gap: 40px; align-items: center">
+    <div style="display: flex; flex-direction: column; gap: 16px">
+      <span class="label">Установка</span>
+      <h2>Установка за&nbsp;минуту</h2>
+      <p class="muted">Зарегистрируйтесь, добавьте сайт и&nbsp;скопируйте строку кода. Сервер, база данных и&nbsp;сборка не&nbsp;нужны.</p>
+    </div>
+    <div style="display: flex; flex-direction: column; gap: 12px">
+      <div class="mono" style="background: var(--ink); color: var(--paper); border-radius: 14px; padding: 22px; font-size: 15px; line-height: 1.7; overflow-x: auto"><span style="color: #9c9a92">&lt;script</span> src=<span style="color: var(--dot)">"%VITE_INBOX_WIDGET_URL%/embed.js"</span><br>&nbsp;&nbsp;data-site=<span style="color: var(--dot)">"ключ_вашего_сайта"</span> async<span style="color: #9c9a92">&gt;&lt;/script&gt;</span></div>
+      <p class="muted" style="font-size: 15px">Своя кнопка в&nbsp;любом месте страницы: <code class="mono" style="background: #fff; border: 1px solid var(--line); border-radius: 6px; padding: 2px 6px; font-size: 13px">&lt;button data-inbox="booking"&gt;Записаться&lt;/button&gt;</code></p>
+    </div>
+  </div>
+</section>
+
+<section id="security" class="wrap" style="padding-top: 40px; padding-bottom: 96px; display: flex; flex-direction: column; gap: 40px">
+  <div style="display: flex; flex-direction: column; gap: 14px; max-width: 860px">
+    <span class="label">Данные и&nbsp;команда</span>
+    <h2>Доступ только у&nbsp;вас и&nbsp;вашей команды</h2>
+  </div>
+  <div class="grid3">
+    <div class="card"><h3>Хранение в&nbsp;России</h3><p>Сообщения и&nbsp;снимки экрана хранятся на&nbsp;серверах Layero в&nbsp;России.</p></div>
+    <div class="card"><h3>Закрытые снимки</h3><p>Снимки экрана лежат в&nbsp;закрытом хранилище. Открыть их&nbsp;могут только владелец и&nbsp;команда сайта.</p></div>
+    <div class="card"><h3>Команда</h3><p>Пригласите коллег по&nbsp;почте: они увидят сообщения только ваших сайтов. Вход по&nbsp;почте или&nbsp;через Яндекс&nbsp;ID.</p></div>
+  </div>
+</section>
+
+<footer style="background: var(--ink); color: var(--paper)">
+  <div class="wrap" style="padding-top: 88px; padding-bottom: 56px; display: flex; flex-direction: column; gap: 40px">
+    <h2 style="font-size: clamp(40px, 6vw, 84px); max-width: 980px">Начните собирать обратную связь сегодня</h2>
+    <div style="display: flex; justify-content: space-between; align-items: center; gap: 16px; flex-wrap: wrap">
+      <a class="btn light" href="/dashboard/" style="font-size: 17px; padding: 16px 26px">Подключить сайт →</a>
+      <span class="mono" style="font-size: 13px; color: #b8b6ad">Layero Inbox · работает на&nbsp;Layero</span>
+    </div>
+  </div>
+</footer>
+
+<script src="%VITE_INBOX_WIDGET_URL%/embed.js" data-site="%VITE_INBOX_SITE_KEY%" async></script>
+</body>
+</html>

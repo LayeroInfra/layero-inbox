@@ -1,0 +1,16 @@
+{
+  "name": "layero-inbox-widget",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "scripts": {
+    "build": "node scripts/vendor.mjs && vite build",
+    "dev": "vite"
+  },
+  "dependencies": {
+    "html2canvas-pro": "1.5.11"
+  },
+  "devDependencies": {
+    "vite": "7.1.12"
+  }
+}
