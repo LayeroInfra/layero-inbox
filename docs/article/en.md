@@ -358,8 +358,8 @@ from there.
 ![Data API allowed sites](../img/guide/14-origins.png)
 
 "Any site" is off: third-party sites don't call the database; the widget opens
-an iframe for them. The linked projects — widget and dashboard — are added
-automatically.
+an iframe for them. Layero adds the linked projects — widget and dashboard —
+and their branch environments automatically.
 
 **CLI.**
 
