@@ -1,6 +1,6 @@
 # A database app without a backend: building Layero Inbox
 
-*A step-by-step walkthrough of a reference app on Layero: Postgres, Data API,
+*A step-by-step walkthrough of an app on Layero: Postgres, Data API,
 auth, storage and notifications. About 30 minutes.*
 
 ![Layero Inbox: landing page with a feedback form](../img/landing.png)
@@ -86,12 +86,16 @@ npx layero@latest db create inbox --org my-team
 npx layero@latest data enable --db inbox --org my-team --auth --storage
 ```
 
-Create the screenshot bucket right away: Files → Add bucket.
+Create the screenshot bucket right away.
+
+**Dashboard.** Files → Add bucket.
 
 ![New bucket: screenshots](../img/guide/02-bucket.png)
 
 1. "Public" is off: screenshots open only via signed URLs.
 2. Up to 5 MB, JPEG or PNG only — the bucket rejects anything else.
+
+**CLI.**
 
 ```bash
 npx layero@latest data buckets create screenshots --private --max 5MB \
@@ -358,8 +362,8 @@ from there.
 ![Data API allowed sites](../img/guide/14-origins.png)
 
 "Any site" is off: third-party sites don't call the database; the widget opens
-an iframe for them. Layero adds the linked projects — widget and dashboard —
-and their branch environments automatically.
+an iframe for them. Layero adds the widget and dashboard addresses, and their
+branch environments, automatically.
 
 **CLI.**
 
@@ -367,7 +371,8 @@ and their branch environments automatically.
 npx layero@latest data origins list --db inbox
 ```
 
-The owner's site gets one line, plus optional buttons:
+The dashboard shows the site key `st_…` once the owner adds a site. The site
+gets one line, plus optional buttons:
 
 ```html
 <script src="https://inbox-widget.layero.app/embed.js" data-site="st_…" async></script>
