@@ -6,6 +6,8 @@ sign-in, file storage and Telegram notifications.
 
 [Live demo](https://inbox.layero.app) · [Article: how it's built](docs/article/en.md) · [Русский](README.md)
 
+Mirrors: [GitHub](https://github.com/LayeroInfra/layero-inbox) · [GitVerse](https://gitverse.ru/layero/layero-inbox)
+
 ![Layero Inbox landing](docs/img/landing.png)
 
 ![Layero Inbox dashboard](docs/img/guide/13-inbox.png)

@@ -6,6 +6,8 @@
 
 [Живое демо](https://inbox.layero.app) · [Статья: как это собрано](docs/article/ru.md) · [English](README.en.md)
 
+Зеркала: [GitHub](https://github.com/LayeroInfra/layero-inbox) · [GitVerse](https://gitverse.ru/layero/layero-inbox)
+
 ![Лендинг Layero Inbox](docs/img/landing.png)
 
 ![Входящие Layero Inbox](docs/img/guide/13-inbox.png)
